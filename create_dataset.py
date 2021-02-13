@@ -45,16 +45,18 @@ else:
         for l in f.readlines():
             l_split = l.split(args.COLUMN_SEP)
             filename, text = l_split[0], l_split[-1]
+
             if filename.endswith('.wav'):
                 filename = filename.split('.')[-1]
             text = text_cleaner.clean(text)
+
             audio_data.append((filename, text))
     audio_data = np.array(audio_data)
     print('\nPhonemizing')
     
     phonemizer = Phonemizer(config['phoneme_language'])
     texts = audio_data[:, 1]
-    batch_size = 250  # batch phonemization to avoid memory issues.
+    batch_size = 5  # batch phonemization to avoid memory issues.
     phonemes = []
     for i in tqdm.tqdm(range(0, len(audio_data), batch_size)):
         batch = texts[i: i + batch_size]
@@ -83,7 +85,7 @@ with open(train_metafile, 'w+', encoding='utf-8') as train_f:
 audio = Audio(config)
 for i in tqdm.tqdm(range(len(audio_data))):
     filename, _, _ = audio_data[i]
-    wav_path = os.path.join(args.WAV_DIR, filename + '.wav')
+    wav_path = os.path.join(args.WAV_DIR, filename.replace('"', '') + '.wav')
     y, sr = librosa.load(wav_path, sr=config['sampling_rate'])
     mel = audio.mel_spectrogram(y)
     mel_path = os.path.join(mel_dir, filename)
