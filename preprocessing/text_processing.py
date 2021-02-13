@@ -11,7 +11,7 @@ _diacrilics = 'ɚ˞ɫ'
 _phonemes = sorted(list(
     _vowels + _non_pulmonic_consonants + _pulmonic_consonants + _suprasegmentals + _other_symbols + _diacrilics))
 _punctuations = '!,-.:;? '
-_alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzäüöß'
+_alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzäüößАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯабвгдеёжзийклмнопрстуфхцчшщыэюя'
 _not_end_punctuation = ',-.:; '
 _ad_hoc_replace = {
     'Mrs.': 'Mrs',
@@ -67,7 +67,7 @@ class Phonemizer:
         self.language = language
         self.cleaner = TextCleaner(alphabet)
     
-    def encode(self, text, strip=True, preserve_punctuation=True, with_stress=False, njobs=4, clean=True):
+    def encode(self, text, strip=True, preserve_punctuation=False, with_stress=False, njobs=4, clean=True):
         if clean:
             text = self.cleaner.clean(text)
         phonemes = phonemize(text,
